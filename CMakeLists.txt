@@ -3,4 +3,8 @@ project(ProjectBrick)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(ProjectBrick main.cpp)
+find_package(glfw3 3.3 REQUIRED)
+
+add_executable(ProjectBrick "lib/gl.c" main.cpp)
+
+target_link_libraries(ProjectBrick glfw GL)
