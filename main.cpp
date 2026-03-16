@@ -2,6 +2,9 @@
 #include <glad/gl.h>
 #include <GLFW/glfw3.h>
 
+#include "GLUtils.h"
+#include "Point.h"
+
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
 bool didGladInitialize();
@@ -36,6 +39,9 @@ const unsigned int INDICES[] = {  // note that we start from 0!
     0, 1, 2,  // first Triangle
     1, 2, 3   // second Triangle
 };
+
+GLUtils utils;
+
 
 int main() {
     glfwInit();
