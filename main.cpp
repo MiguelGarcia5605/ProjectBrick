@@ -9,6 +9,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
 bool didGladInitialize();
 bool isWindowNull(GLFWwindow* window);
+void drawLine(float one, float two, float three, float four, float five, float six);
 
 const char *vertexShaderSource = "#version 330 core\n"
     "layout (location = 0) in vec3 aPos;\n"
@@ -28,20 +29,7 @@ const int WINDOW_SIZE = 1000;
 const int GAME_PIXEL_SIZE = 10; // One game pixel is equal to a 10x10 pixel on screen
 const float GAME_PIXEL_FLOAT_SIZE = float(GAME_PIXEL_SIZE) / float(WINDOW_SIZE); // 0.01f
 
-const float VERTICES[] = {
-    -GAME_PIXEL_FLOAT_SIZE, -GAME_PIXEL_FLOAT_SIZE, 0.0f,  // bottom left
-    GAME_PIXEL_FLOAT_SIZE, -GAME_PIXEL_FLOAT_SIZE, 0.0f,  // bottom right
-    -GAME_PIXEL_FLOAT_SIZE,  GAME_PIXEL_FLOAT_SIZE, 0.0f,  // top left
-    GAME_PIXEL_FLOAT_SIZE,  GAME_PIXEL_FLOAT_SIZE, 0.0f  // top right
-};
-
-const unsigned int INDICES[] = {  // note that we start from 0!
-    0, 1, 2,  // first Triangle
-    1, 2, 3   // second Triangle
-};
-
 GLUtils utils;
-
 
 int main() {
     glfwInit();
@@ -64,16 +52,15 @@ int main() {
     glGenVertexArrays(1, &VAO);
     glBindVertexArray(VAO);
 
-    // create buffer
     unsigned int VBO;
     glGenBuffers(1, &VBO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(VERTICES), VERTICES, GL_STATIC_DRAW);
+   // glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), NULL, GL_STATIC_DRAW);
 
-    unsigned int EBO;
-    glGenBuffers(1, &EBO);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(INDICES), INDICES, GL_STATIC_DRAW);
+    // unsigned int EBO;
+    // glGenBuffers(1, &EBO);
+    // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    // glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(INDICES), INDICES, GL_STATIC_DRAW);
 
     // compile vertex shader
     unsigned int vertexShader;
@@ -93,14 +80,12 @@ int main() {
     glAttachShader(shaderProgram, vertexShader);
     glAttachShader(shaderProgram, fragmentShader);
     glLinkProgram(shaderProgram);
+    glUseProgram(shaderProgram);
 
-    glDeleteShader(vertexShader);
-    glDeleteShader(fragmentShader);
-
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 
-    glBindVertexArray(0);
+    drawLine(0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f);
 
     while (!glfwWindowShouldClose(window)) {
         // INPUT
@@ -113,10 +98,7 @@ int main() {
         glClear(GL_COLOR_BUFFER_BIT);
 
         // Draw Pixel
-        glUseProgram(shaderProgram);
-        glBindVertexArray(VAO);
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-        glBindVertexArray(0);
+        glDrawArrays(GL_LINES, 0, 2);
 
         // CHECK/CALL EVENTS && SWAP BUFFERS
         glfwSwapBuffers(window);
@@ -127,9 +109,13 @@ int main() {
     return 0;
 }
 
-void createSquare(int width, int height) {
-    // Create Vertices
+void drawLine(float one, float two, float three, float four, float five, float six) {
 
+    float vertices[] {
+        one, two, three,
+        four, five, six
+    };
+    // create buffer
 }
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
